@@ -1,0 +1,13 @@
+criar arquivo flyway.properties em dir:resources
+anotar -> {
+flyway.url= *msm url do banco utilizado*
+flyway.user=root
+flyway.password=
+}
+
+rodar na linha de comando
+mvnw flyway:repair -Dflyway.configFiles=src/main/resources/flyway.properties -> serve pra reparar migracoes falhas
+
+not null -> subtotal, taxaFrete, valorTotal, dataCriacao, formaPagamento, restaurante, cliente, status
+
+itemPedido -> quantidade, precoUnitario, precototal {not null}
