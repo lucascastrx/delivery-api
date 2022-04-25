@@ -23,7 +23,7 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -162,7 +162,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
         return handleExceptionInternal(e, error, new HttpHeaders(), status, request);
 //        ApiError error = ApiError.builder()
-//                .dataHora(LocalDateTime.now())
+//                .dataHora(OffsetDateTime.now())
 //                .mensagem(e.getMessage())
 //                .build();
 //
@@ -196,7 +196,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 //    public ResponseEntity<?> handleExceptions(){
 //
 //        ApiError error = ApiError.builder()
-//                .dataHora(LocalDateTime.now())
+//                .dataHora(OffsetDateTime.now())
 //                .mensagem("O tipo de mídia não é aceito!")
 //                .build();
 //
@@ -247,7 +247,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
                 .type(type.getUri())
                 .title(type.getTitle())
                 .detail(detail)
-                .timestamp(LocalDateTime.now());
+                .timestamp(OffsetDateTime.now());
     }
 
     private String joinPath(List<JsonMappingException.Reference> references){

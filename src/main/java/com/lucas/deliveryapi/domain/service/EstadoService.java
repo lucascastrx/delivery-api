@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class EstadoService {
@@ -15,6 +16,7 @@ public class EstadoService {
     @Autowired
     private EstadoRepository estadoRepository;
 
+    @Transactional
     public Estado addEstado(Estado estado){
         return estadoRepository.save(estado);
     }
@@ -25,9 +27,11 @@ public class EstadoService {
     }
 
 
+    @Transactional
     public void delete(Long id){
         try {
             estadoRepository.deleteById(id);
+            estadoRepository.flush();
         } catch (DataIntegrityViolationException e) {
             throw new EntityUnviableException("Entidade está em uso " + id);
         } catch (EmptyResultDataAccessException e) {

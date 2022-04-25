@@ -8,6 +8,6 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface PermissãoRepository extends JpaRepository<Permissao, Long> {
+public interface PermissaoRepository extends JpaRepository<Permissao, Long> {
 
 }

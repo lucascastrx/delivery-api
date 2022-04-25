@@ -16,9 +16,11 @@ import javax.validation.constraints.PositiveOrZero;
 import javax.validation.groups.ConvertGroup;
 import javax.validation.groups.Default;
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @ZeroIncludesDescription(valorField = "taxaFrete", descricaoField = "nome", descricaoObrigatoria = "Frete Grátis")
 @Data
@@ -31,46 +33,89 @@ public class Restaurante {
     @EqualsAndHashCode.Include
     private Long id;
 
-    @NotBlank
+
     private String nome;
-
-//    @DecimalMin("0")
-    @NotNull
-    @PositiveOrZero//(message = "{TaxaFrete.invalida}") <- pode ser usado como forma de customizacao do ResourceBundle, a propriedade fica no messages.properties porem toma override do SpringResourceBundle, o bean eh definido em ValidationConfig
     private BigDecimal taxaFrete;
+    private Boolean ativo = Boolean.TRUE;
+    private Boolean aberto = Boolean.TRUE;
 
-//    @JsonIgnore
-//    @JsonIgnoreProperties("hibernateLazyInitializer")
-    @Valid
-    @ConvertGroup(from = Default.class, to = Groups.CozinhaId.class)
-    @NotNull
     @ManyToOne//(fetch = FetchType.LAZY)
     @JoinColumn(nullable = false)
     private Cozinha cozinha;
 
-    @JsonIgnore
     @Embedded
     private Endereco endereco;
 
-    @JsonIgnore
     @CreationTimestamp
     @Column(nullable = false, columnDefinition = "datetime")
-    private LocalDateTime dataCadastro;
+    private OffsetDateTime dataCadastro;
 
-    @JsonIgnore
     @UpdateTimestamp
     @Column(nullable = false, columnDefinition = "datetime")
-    private LocalDateTime dataAtualizacao;
+    private OffsetDateTime dataAtualizacao;
 
-    @JsonIgnore
     @ManyToMany
     @JoinTable(name = "restaurante_forma_pagamento",
             joinColumns = @JoinColumn(name = "restaurante_id"),
             inverseJoinColumns = @JoinColumn(name = "forma_pagamento_id")
     )
-    private List<FormaPagamento> formasPagamento = new ArrayList<>();
+    private Set<FormaPagamento> formasPagamento = new HashSet<>();
 
-    @JsonIgnore
+    @ManyToMany
+    @JoinTable(name = "restaurante_usuario_responsavel",
+            joinColumns = @JoinColumn(name = "restaurante_id"),
+            inverseJoinColumns = @JoinColumn(name = "usuario_id")
+    )
+    private Set<Usuario> responsaveis = new HashSet<>();
+
     @OneToMany(mappedBy = "restaurante")
     private List<Produto> produtos = new ArrayList<>();
+
+    public Boolean ativar(){
+        setAtivo(true);
+        return getAtivo();
+    }
+
+    public Boolean inativar(){
+        setAtivo(false);
+        return getAtivo();
+    }
+
+    public Boolean abrir(){
+        setAberto(true);
+        return getAberto();
+    }
+
+    public Boolean fechar(){
+        setAberto(false);
+        return getAberto();
+    }
+
+    public boolean addFormaPagamento(FormaPagamento formaPagamento){
+        return getFormasPagamento().add(formaPagamento);
+    }
+
+    public boolean removeFormaPagamento(FormaPagamento formaPagamento){
+        return getFormasPagamento().remove(formaPagamento);
+    }
+
+    public boolean containsFormaPagamento(FormaPagamento formaPagamento){
+        return getFormasPagamento().contains(formaPagamento);
+    }
+
+    public boolean naoAceitaFormaPagamento(FormaPagamento formaPagamento){
+        return !containsFormaPagamento(formaPagamento);
+    }
+
+    public boolean addResponsavel(Usuario responsavel){
+        return getResponsaveis().add(responsavel);
+    }
+
+    public boolean removeResponsavel(Usuario responsavel){
+        return getResponsaveis().remove(responsavel);
+    }
+
+    public boolean containsResponsavel(Usuario responsavel){
+        return getResponsaveis().contains(responsavel);
+    }
 }

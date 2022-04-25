@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class CidadeService {
@@ -18,6 +19,7 @@ public class CidadeService {
     @Autowired
     private EstadoService estadoService;
 
+    @Transactional
     public Cidade addCidade(Cidade cidade){
         var estado = estadoService.findById(cidade.getEstado().getId());
 
@@ -26,9 +28,11 @@ public class CidadeService {
         return cidadeRepository.save(cidade);
     }
 
+    @Transactional
     public void delete(Long id){
         try {
             cidadeRepository.deleteById(id);
+            cidadeRepository.flush();
         } catch (DataIntegrityViolationException e) {
             throw new EntityUnviableException("Entidade não pode ser removida pois está em uso");
         } catch (EmptyResultDataAccessException e) {

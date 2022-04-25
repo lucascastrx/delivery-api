@@ -17,18 +17,18 @@ import java.util.List;
 public class Cozinha {
 
 
-    @NotNull(groups = Groups.CozinhaId.class)
+//    @NotNull(groups = Groups.CozinhaId.class)
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include
     private Long id;
 
-    @NotBlank
+//    @NotBlank
 //    @JsonProperty("titulo")
     private String nome;
 
 
-    @JsonIgnore
+//    @JsonIgnore
     @OneToMany(mappedBy = "cozinha")
     private List<Restaurante> restaurantes = new ArrayList<>();
 }
