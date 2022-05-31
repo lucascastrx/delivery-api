@@ -20,7 +20,7 @@ import util.DatabaseCleaner;
 
 @ExtendWith({SpringExtension.class})
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT) //o padrão é utilizar o MOCK, ou seja, n levante um web server real
-@TestPropertySource("/application-test.properties")
+//@TestPropertySource("/application-test.properties")
 public class CadastroCozinhaRestAssuredIT {
 
     @LocalServerPort

@@ -23,7 +23,7 @@ import java.math.BigDecimal;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@TestPropertySource("/application-test.properties")
+//@TestPropertySource("/application-test.properties")
 public class CadastroRestauranteIT {
 
     @LocalServerPort
