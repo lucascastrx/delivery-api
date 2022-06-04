@@ -58,13 +58,13 @@ public class CadastroCozinhaRestAssuredIT {
     }
 
     @Test
-    public void deveConter2Cozinhas_QuandoConsultarCozinhas(){
+    public void deveConter7Cozinhas_QuandoConsultarCozinhas(){
 
         RestAssured
                  .when()
                     .get()
                 .then()
-                    .body("", Matchers.hasSize(2))
+                    .body("", Matchers.hasSize(7))
                     .body("nome", Matchers.hasItems("Italiana", "Espanhola"));
 
 

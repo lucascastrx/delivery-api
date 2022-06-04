@@ -2,9 +2,10 @@ package com.lucas.deliveryapi;
 
 import com.lucas.deliveryapi.domain.exception.EntityUnviableException;
 import com.lucas.deliveryapi.domain.exception.KitchenNotFoundException;
-import com.lucas.deliveryapi.domain.model.Cozinha;
-import com.lucas.deliveryapi.domain.model.Restaurante;
+import com.lucas.deliveryapi.domain.model.*;
+import com.lucas.deliveryapi.domain.service.CidadeService;
 import com.lucas.deliveryapi.domain.service.CozinhaService;
+import com.lucas.deliveryapi.domain.service.EstadoService;
 import com.lucas.deliveryapi.domain.service.RestauranteService;
 import org.assertj.core.api.Assertions;
 
@@ -13,9 +14,14 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import javax.validation.ConstraintViolationException;
+import javax.xml.crypto.Data;
+
+import java.math.BigDecimal;
+import java.time.OffsetDateTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -28,6 +34,12 @@ class CadastroCozinhaIT {
 
     @Autowired
     private RestauranteService restauranteService;
+
+    @Autowired
+    private EstadoService estadoService;
+
+    @Autowired
+    private CidadeService cidadeService;
 
     @BeforeEach
     public void setUp(){
@@ -42,7 +54,7 @@ class CadastroCozinhaIT {
         cozinha = cozinhaService.addCozinha(cozinha);
 
         assertThat(cozinha).isNotNull();
-        assertThat(cozinha.getId()).isEqualTo(18);
+        assertThat(cozinha.getId()).isEqualTo(7);
 
     }
 
@@ -51,7 +63,7 @@ class CadastroCozinhaIT {
         Cozinha cozinha = new Cozinha();
         cozinha.setNome(null);
 
-        ConstraintViolationException error = org.junit.jupiter.api.Assertions.assertThrows(ConstraintViolationException.class,
+        DataIntegrityViolationException error = org.junit.jupiter.api.Assertions.assertThrows(DataIntegrityViolationException.class,
                 ()-> cozinhaService.addCozinha(cozinha));
 
         assertThat(error).isNotNull();
@@ -59,17 +71,42 @@ class CadastroCozinhaIT {
 
     @Test
     public void deveFalhar_QuandoExcluirCozinhaEmUso(){
-        var ref = new Object() {
-            Cozinha cozinha = new Cozinha();
-        };
+
+        Cozinha cozinha = new Cozinha();
+        cozinha.setNome("Brazuka");
+
+        Estado estado = new Estado();
+        estado.setNome("Ceara");
+        estadoService.addEstado(estado);
+
+        Cidade cidade = new Cidade();
+        cidade.setNome("Fortaleza");
+        cidade.setEstado(estado);
+        cidadeService.addCidade(cidade);
+
+        Endereco endereco = new Endereco();
+        endereco.setCidade(cidade);
+        endereco.setCep("4654646546");
+        endereco.setLogradouro("Rua Corvina");
+        endereco.setBairro("Bairro das Garças");
+        endereco.setNumero("22");
+
         Restaurante restaurante = new Restaurante();
+        restaurante.setEndereco(endereco);
+        restaurante.setNome("Delicias Nordestinas");
+        restaurante.setTaxaFrete(new BigDecimal(10));
+        restaurante.setDataCadastro(OffsetDateTime.now());
+        restaurante.setDataAtualizacao(OffsetDateTime.now());
 
-        ref.cozinha = cozinhaService.addCozinha(ref.cozinha);
-        restaurante.setCozinha(ref.cozinha);
+
+
+        cozinha = cozinhaService.addCozinha(cozinha);
+        System.out.println(cozinha.getId());
+        restaurante.setCozinha(cozinha);
         restaurante = restauranteService.addRestaurante(restaurante);
-
+        Long id = cozinha.getId();
         EntityUnviableException error = org.junit.jupiter.api.Assertions.assertThrows(EntityUnviableException.class,
-                ()-> cozinhaService.delete(ref.cozinha.getId()));
+                ()-> cozinhaService.delete(id));
 
         assertThat(error).isNotNull();
     }

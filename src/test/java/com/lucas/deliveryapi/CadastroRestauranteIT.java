@@ -6,7 +6,6 @@ import com.lucas.deliveryapi.domain.repository.CozinhaRepository;
 import com.lucas.deliveryapi.domain.repository.RestauranteRepository;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
-import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,7 +22,7 @@ import java.math.BigDecimal;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-//@TestPropertySource("/application-test.properties")
+@TestPropertySource("/application-test.properties")
 public class CadastroRestauranteIT {
 
     @LocalServerPort
