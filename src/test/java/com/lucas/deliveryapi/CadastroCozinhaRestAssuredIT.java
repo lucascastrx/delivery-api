@@ -2,10 +2,9 @@ package com.lucas.deliveryapi;
 
 import com.lucas.deliveryapi.domain.model.Cozinha;
 import com.lucas.deliveryapi.domain.repository.CozinhaRepository;
+import com.lucas.deliveryapi.util.DatabaseCleaner;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
-import org.apache.catalina.Store;
-import org.flywaydb.core.Flyway;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,11 +15,10 @@ import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import util.DatabaseCleaner;
 
 @ExtendWith({SpringExtension.class})
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT) //o padrão é utilizar o MOCK, ou seja, n levante um web server real
-//@TestPropertySource("/application-test.properties")
+@TestPropertySource("/application-test.properties")
 public class CadastroCozinhaRestAssuredIT {
 
     @LocalServerPort
@@ -64,7 +62,7 @@ public class CadastroCozinhaRestAssuredIT {
                  .when()
                     .get()
                 .then()
-                    .body("", Matchers.hasSize(7))
+                    .body("", Matchers.hasSize(2))
                     .body("nome", Matchers.hasItems("Italiana", "Espanhola"));
 
 

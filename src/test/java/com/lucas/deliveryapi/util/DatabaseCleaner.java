@@ -1,4 +1,4 @@
-package util;
+package com.lucas.deliveryapi.util;
 
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
