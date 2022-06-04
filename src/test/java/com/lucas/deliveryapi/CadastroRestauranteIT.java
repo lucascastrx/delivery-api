@@ -24,7 +24,7 @@ import java.time.OffsetDateTime;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@TestPropertySource("/application-test.properties")
+@TestPropertySource("/application.properties")
 public class CadastroRestauranteIT {
 
     @LocalServerPort
