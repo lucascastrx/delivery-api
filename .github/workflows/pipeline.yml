@@ -25,7 +25,7 @@ jobs:
       - name: Start MySQL
         run: |
           sudo /etc/init.d/mysql start
-          mysql -e 'CREATE DATABASE deliverydb;' -u root -proot
+          mysql -e 'CREATE DATABASE deliverydb_test;' -u root -proot
 #          mysql -e 'CREATE DATABASE deliverydb;' -u root -proot
 
       - name: Build with Maven
