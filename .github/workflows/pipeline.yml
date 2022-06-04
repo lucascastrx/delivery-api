@@ -11,14 +11,7 @@ on:
 jobs:
   run-tests:
     runs-on: ubuntu-latest
-    services:
-      mysql:
-        image: mysql:8.0
-        options: >-
-          --health-cmd mysqladmin 
-          --health-interval 10s 
-          --health-timeout 5s 
-          --health-retries 3
+
     steps:
       - name: Checkout the repository
         uses: actions/checkout@v3
@@ -31,8 +24,9 @@ jobs:
           cache: maven
       - name: Start MySQL
         run: |
-          sudo /etc/init.d/mysql start
-          mysql -h 127.0.0.1 -e 'CREATE DATABASE deliverydb_test;' -uroot -proot
+#          sudo /etc/init.d/mysql start
+          sudo systemctl start mysql.service
+          mysql -e 'CREATE DATABASE deliverydb_test;' -uroot -proot
 #          mysql -e 'CREATE DATABASE deliverydb-test;' -u root -proot
 
       - name: Build with Maven
